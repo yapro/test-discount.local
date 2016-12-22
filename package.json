@@ -10,17 +10,18 @@
   },
   "main": "index.js",
   "dependencies": {
+    "angular": "^1.6.0",
     "bootstrap": "^3.3.6",
     "bootstrap-webpack": "0.0.5",
+    "css-loader": "^0.23.1",
     "exports-loader": "^0.6.3",
+    "expose-loader": "^0.7.1",
+    "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
     "imports-loader": "^0.6.5",
-    "jquery": "^2.2.2"
-  },
-  "devDependencies": {
-    "css-loader": "^0.23.1",
-    "expose-loader": "^0.7.1",
+    "jquery": "^2.2.2",
     "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
     "webpack": "^1.12.14",
     "webpack-dev-server": "^1.14.1"
   },
@@ -28,6 +29,7 @@
     "sourceType": "module"
   },
   "scripts": {
-    "prepare_project": "node node_modules/webpack/bin/webpack.js"
+    "start": "node dev-server",
+    "test": "node node_modules/webpack/bin/webpack.js -p"
   }
 }
