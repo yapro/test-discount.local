@@ -1,10 +1,13 @@
 <!doctype html>
-<html ng-app="todoApp">
+<html ng-app="myApp">
 <head>
-    <script src="/assets/build.js"></script>
     <link rel="stylesheet" href="/assets/build.css">
 </head>
 <body>
-{{ 1 + 2 }}
+<div class="container">
+    <ng-view></ng-view>
+</div>
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="/assets/build.js"></script>
 </body>
 </html>

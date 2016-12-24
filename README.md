@@ -21,7 +21,7 @@ JS
 
 How to build project for product
 ```
-npm test
+node node_modules/webpack/bin/webpack.js -p --display-error-details
 ```
 
 How to start dev-server
