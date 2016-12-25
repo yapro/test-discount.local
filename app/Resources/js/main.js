@@ -14,9 +14,9 @@ myApp.config(['$routeProvider', function($routeProvide){
       templateUrl:'template/order.html',
       controller:'orderCtrl'
     })
-    .when('/amenity',{
-      templateUrl:'template/amenity.html',
-      controller:'Amenity'
+    .when('/amenities',{
+      templateUrl:'template/amenities.html',
+      controller:'AmenitiesCtrl'
     })
     .when('/discount-terms',{
       templateUrl:'template/discount-terms.html',
@@ -54,8 +54,30 @@ myApp.controller('orderCtrl',['$scope','$http', '$location', function($scope, $h
   };
 }]);
 
-myApp.controller('AmenityCtrl',['$scope','$http', '$location', function($scope, $http, $location) {
+myApp.controller('AmenitiesCtrl',['$scope', '$http', '$location', function($scope, $http, $location) {
+  var maxIntNumber = 9007199254740991;
+  $scope.amenities = [{'addNew':true,'id':maxIntNumber, 'name':''}];
+  var amenities = [
+    {'id' : 1, 'name' : 'Услуга 1'},
+    {'id' : 2, 'name' : 'Услуга 2'}
+  ];
+  $scope.amenities = $scope.amenities.concat(amenities);
 
+  $scope.update = function (item) {
+
+  };
+  $scope.delete = function (item) {
+
+  };
+  $scope.add = function (item) {
+    $scope.amenities.push({'id': ($scope.amenities.length + 1), 'name':item.name});
+    item.name = '';
+  };
+/*
+ $http.get('api/order').success(function(data, status, headers, config) {
+ $scope.amenities = data;
+ });
+*/
 }]);
 
 myApp.controller('DiscountTermsCtrl',['$scope','$http', '$location', function($scope, $http, $location) {
