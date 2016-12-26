@@ -31,6 +31,6 @@
     "sourceType": "module"
   },
   "scripts": {
-    "start": "node dev-server"
+    "start": "./nodejs/bin/node dev-server"
   }
 }

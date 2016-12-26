@@ -1,37 +1,30 @@
-Based on Symfony Standard Edition and some bunles
+
 ========================
+Backend based on Symfony Standard Edition and some bundles (PHP 5.6)
+Frontend based on Angular (Node.js, npm, webpack)
 
-How to configure
+How to install and configure
 
 ```
-echo -e '127.0.0.1\ttest-discount.local' >> /etc/hosts
-ln -sf /var/www/test-discount.local/nginx.conf /etc/nginx/sites-enabled/test-discount.local.conf
-service nginx reload
-chmod -R 777 var/cache
-chmod -R 777 var/logs
-```
-
-How to install
-```
-composer install
+./install.sh
 ```
 
 JS
 ---
 
-How to build project for product
-```
-node node_modules/webpack/bin/webpack.js -p --display-error-details
-```
-
 How to start dev-server
 ```
-npm start
+./nodejs/bin/npm start
 ```
-and than open in browser: http://localhost:8088/webpack-dev-server/
+and than open in browser: http://localhost:8088/webpack-dev-server/ or http://localhost:8088/
+
+How to build project for product
+```
+./nodejs/bin/node node_modules/webpack/bin/webpack.js -p --display-error-details
+```
 
 How to restart node.js and dev-server
 ```
 killall -9 node
-node dev-server
+./nodejs/bin/node dev-server
 ```

@@ -14,6 +14,7 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
-/node_modules
 /.idea
+/nodejs
+/node_modules
 /npm-debug.log
