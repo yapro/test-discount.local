@@ -1,0 +1,4 @@
+services:
+    amenity_manager:
+        class: AppBundle\Manager\AmenityManager
+        arguments: ["@request_stack", "@doctrine.orm.entity_manager"]

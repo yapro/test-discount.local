@@ -8,7 +8,6 @@ var myApp = angular.module('myApp', [
 ]);
 
 myApp.config(['$routeProvider', function($routeProvide){
-  // https://youtu.be/TDSUd1K5Mhw?list=PLY4rE9dstrJxWEX3fCPjFpmcnoU_3GRWW - 6:40
   $routeProvide
     .when('/', {
       templateUrl:'template/order.html',
@@ -26,6 +25,9 @@ myApp.config(['$routeProvider', function($routeProvide){
       redirectTo: '/'
     });
 }]);
+
+var httpHost = "http://test-discount.local";
+var httpError = "The service " + httpHost + " has problems";
 
 myApp.controller('orderCtrl',['$scope','$http', '$location', function($scope, $http, $location) {
   $scope.amenities = [
@@ -55,29 +57,44 @@ myApp.controller('orderCtrl',['$scope','$http', '$location', function($scope, $h
 }]);
 
 myApp.controller('AmenitiesCtrl',['$scope', '$http', '$location', function($scope, $http, $location) {
+  $scope.httpError = '';
   var maxIntNumber = 9007199254740991;
   $scope.amenities = [{'addNew':true,'id':maxIntNumber, 'name':''}];
-  var amenities = [
-    {'id' : 1, 'name' : 'Услуга 1'},
-    {'id' : 2, 'name' : 'Услуга 2'}
-  ];
-  $scope.amenities = $scope.amenities.concat(amenities);
+
+  $http.get(httpHost + '/api/amenity/').then(function successCallback(response) {
+    $scope.amenities = $scope.amenities.concat(response.data);
+  }, function errorCallback(response) {
+    $scope.httpError = httpError;
+  });
+
+  $scope.add = function (item) {
+    $http.put(httpHost + '/api/amenity/', item).then(function successCallback(response) {
+      $scope.amenities.push(response.data);
+      item.name = '';
+    }, function errorCallback(response) {
+      $scope.httpError = httpError;
+    });
+  };
 
   $scope.update = function (item) {
-
+    $http.post(httpHost + '/api/amenity/' + item.id, item).then(function successCallback(response) {
+      item = response.data;
+    }, function errorCallback(response) {
+      $scope.httpError = httpError;
+    });
   };
+
   $scope.delete = function (item) {
+    $http.delete(httpHost + '/api/amenity/'+item.id).then(function successCallback(response) {
+      var itemIndex = $scope.amenities.indexOf(item);
+      var scopeItem = $scope.amenities.splice(itemIndex, 1);
+      scopeItem = null;
+    }, function errorCallback(response) {
+      $scope.httpError = httpError;
+    });
+  };
 
-  };
-  $scope.add = function (item) {
-    $scope.amenities.push({'id': ($scope.amenities.length + 1), 'name':item.name});
-    item.name = '';
-  };
-/*
- $http.get('api/order').success(function(data, status, headers, config) {
- $scope.amenities = data;
- });
-*/
+
 }]);
 
 myApp.controller('DiscountTermsCtrl',['$scope','$http', '$location', function($scope, $http, $location) {
