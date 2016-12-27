@@ -1,3 +1,6 @@
 body {
 	padding-top: 25px;
 }
+.has-error {
+	color: #a94442;
+}

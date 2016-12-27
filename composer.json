@@ -38,7 +38,10 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget",
-            "bin/console assets:install --symlink --relative web"
+            "./bin/console assets:install --symlink --relative web",
+            "./bin/console doctrine:fixtures:load -n",
+            "./bin/console doctrine:schema:update --force",
+            "./nodejs/bin/npm i"
         ],
         "post-install-cmd": [
             "@symfony-scripts"
