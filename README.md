@@ -1,7 +1,8 @@
-
+Test task
 ========================
-Backend based on Symfony Standard Edition and some bundles (PHP 5.6)
-Frontend based on Angular (Node.js, npm, webpack)
+Backend based on Symfony Standard Edition 3.2 and some bundles (PHP 7.0)
+
+Frontend based on Angular 1.6.0 and some dependencies (Node.js, npm, webpack)
 
 How to install and configure
 

@@ -20,10 +20,9 @@ class LoadAmenitiesAndRequirements implements FixtureInterface
                 ->setDateTo($date->modify('1 week'))
             ;
             if ($i === 1) {
-                $date = new \DateTimeImmutable('2000-01-01 00:00:00');
                 $requirement
-                    ->setDateFrom($date->modify('-1 week'))
-                    ->setDateTo($date->modify('1 week'))
+                    ->setFlagBirthDateBefore(true)
+                    ->setFlagBirthDateAfter(true)
                     ->setFlagPhoneNumber(true)
                     ->setPhoneNumberEnd(5491)
                     ->setGender(1)
