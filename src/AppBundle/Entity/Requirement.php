@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -102,7 +103,7 @@ class Requirement
      *
      * @return Requirement
      */
-    public function setAmenities(ArrayCollection $amenities)
+    public function setAmenities(ArrayCollection $amenities) : Requirement
     {
         $this->amenities = $amenities;
 
@@ -112,18 +113,18 @@ class Requirement
     /**
      * Get amenities
      *
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getAmenities() : ArrayCollection
+    public function getAmenities() : Collection
     {
         return $this->amenities;
     }
 
     /**
      * @param Amenity $amenity
-     * @return $this
+     * @return Requirement
      */
-    public function addAmenity(Amenity $amenity)
+    public function addAmenity(Amenity $amenity) : Requirement
     {
         $this->amenities->add($amenity);
 
@@ -132,12 +133,12 @@ class Requirement
 
     /**
      * @param Amenity $amenity
-     * @return $this
+     * @return Requirement
      */
-    public function removeAmenity(Amenity $amenity)
+    public function removeAmenity(Amenity $amenity) : Requirement
     {
         if ($this->amenities->contains($amenity)){
-            $this->amenities->remove($amenity);
+            $this->amenities->removeElement($amenity);
         }
 
         return $this;
@@ -174,7 +175,7 @@ class Requirement
      *
      * @return Requirement
      */
-    public function setFlagBirthDateAfter(bool $flagBirthDateAfter)
+    public function setFlagBirthDateAfter(bool $flagBirthDateAfter) : Requirement
     {
         $this->flagBirthDateAfter = $flagBirthDateAfter;
 
@@ -198,7 +199,7 @@ class Requirement
      *
      * @return Requirement
      */
-    public function setFlagPhoneNumber(bool $flagPhoneNumber)
+    public function setFlagPhoneNumber(bool $flagPhoneNumber) : Requirement
     {
         $this->flagPhoneNumber = $flagPhoneNumber;
 
@@ -222,7 +223,7 @@ class Requirement
      *
      * @return Requirement
      */
-    public function setPhoneNumberEnd(int $phoneNumberEnd)
+    public function setPhoneNumberEnd(int $phoneNumberEnd) : Requirement
     {
         $this->phoneNumberEnd = $phoneNumberEnd;
 
@@ -246,7 +247,7 @@ class Requirement
      *
      * @return Requirement
      */
-    public function setGender(int $gender)
+    public function setGender(int $gender) : Requirement
     {
         $this->gender = $gender;
 
@@ -270,7 +271,7 @@ class Requirement
      *
      * @return Requirement
      */
-    public function setDateFrom(\DateTimeInterface $dateFrom = null)
+    public function setDateFrom(\DateTimeInterface $dateFrom = null) : Requirement
     {
         $this->dateFrom = $dateFrom;
 
@@ -294,7 +295,7 @@ class Requirement
      *
      * @return Requirement
      */
-    public function setDateTo(\DateTimeInterface $dateTo = null)
+    public function setDateTo(\DateTimeInterface $dateTo = null) : Requirement
     {
         $this->dateTo = $dateTo;
 

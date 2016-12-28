@@ -1,0 +1,106 @@
+<p ng-show="httpError" class="has-error">{{ httpError }}</p>
+<p ng-show="successMessage" class="has-success">{{ successMessage }}</p>
+<form class="form-horizontal">
+    <div class="form-group">
+        <label class="col-sm-4 control-label">Услуги</label>
+        <div class="col-sm-8">
+            <div class="checkbox" ng-repeat="amenity in requirement.amenities">
+                <label>
+                    <input type="checkbox" value="{{ amenity.id }}" ng-model="amenity.isSelected" />
+                    {{ amenity.name }}
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 control-label">Дата рождения</label>
+        <div class="col-sm-8">
+            <div class="checkbox">
+                <label>
+                    <input name="flag_birth_date_before" ng-model="requirement.flag_birth_date_before" type="checkbox" value="1"> Неделя после
+                </label>
+                &nbsp; &nbsp;
+                <label>
+                    <input name="flag_birth_date_after" ng-model="requirement.flag_birth_date_after" type="checkbox" value="1"> Неделя после
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="flag_phone_number" class="col-sm-4 control-label">Заполнено ли поле телефон</label>
+        <div class="col-sm-8">
+            <div class="checkbox">
+                <label>
+                    <input name="flag_phone_number" id="flag_phone_number" type="checkbox" ng-model="requirement.flag_phone_number">
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="phone_number_end" class="col-sm-4 control-label">Последние 4 цифры номера телефона</label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" name="phone_number_end" id="phone_number_end" ng-model="requirement.phone_number_end">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 control-label">Пол</label>
+        <div class="col-sm-8">
+            <label class="radio-inline">
+                <input type="radio" name="gender" ng-model="requirement.gender" ng-value="1"> Мужской
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="gender" ng-model="requirement.gender" ng-value="2"> Женский
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 control-label">Период действия условия</label>
+        <div class="col-sm-8">
+            <div class="row">
+                <div class="col-md-5">
+                    <p class="input-group">
+                        <input name="date_from"
+                           type="text"
+                           class="form-control"
+                           uib-datepicker-popup="{{format}}"
+                           ng-model="requirement.date_from"
+                           is-open="popup.opened"
+                           datepicker-options="dateOptions"
+                           ng-required="true"
+                           close-text="Close"
+                           ng-click="openDataPicker()"/>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="openDataPicker()">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                        </span>
+                    </p>
+                </div>
+                <div class="col-md-5">
+                    <p class="input-group">
+                        <input name="date_to"
+                           type="text"
+                           class="form-control"
+                           uib-datepicker-popup="{{format}}"
+                           ng-model="requirement.date_to"
+                           is-open="popup2.opened"
+                           datepicker-options="dateOptions"
+                           ng-required="true"
+                           close-text="Close"
+                           ng-click="openDataPicker2()"/>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="openDataPicker2()">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-4 col-sm-8">
+            <button class="btn btn-success" ng-click="saveRequirement()">Сохранить</button>
+        </div>
+    </div>
+</form>

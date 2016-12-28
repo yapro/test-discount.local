@@ -1,6 +1,7 @@
 'use strict';
 
 const angular = require('angular');
+const dateFormatter = require("./dateFormatter");
 
 var myApp = angular.module('myApp', [
   require('angular-route'),
@@ -17,31 +18,32 @@ myApp.config(['$routeProvider', function($routeProvide){
       templateUrl:'template/amenities.html',
       controller:'AmenitiesCtrl'
     })
-    .when('/discount-terms',{
-      templateUrl:'template/discount-terms.html',
-      controller:'DiscountTermsCtrl'
+    .when('/requirements',{
+      templateUrl:'template/requirements.html',
+      controller:'RequirementsCtrl'
+    })
+    .when('/requirement/:requirementId', {
+      templateUrl:'template/requirement.html',
+      controller:'RequirementCtrl'
     })
     .otherwise({
       redirectTo: '/'
     });
 }]);
 
-var httpHost = "http://test-discount.local";
-var httpError = "The service " + httpHost + " has problems";
-
 myApp.controller('orderCtrl',['$scope','$http', '$location', function($scope, $http, $location) {
   $scope.amenities = [
     {'id' : 1, 'name' : 'Услуга 1'},
     {'id' : 2, 'name' : 'Услуга 2'}
   ];
-/*
-  $http.get('api/order').success(function(data, status, headers, config) {
-    $scope.amenities = data;
+  $http.get('api/amenity/').then(function successCallback(response) {
+    $scope.amenities = $scope.amenities.concat(response.data);
+    $scope.httpError = '';
+  }, function errorCallback(response) {
+    $scope.httpError = response.status + " : " + response.statusText + " : " + response.config.method + " : " + response.config.url;
   });
-*/
 
   $scope.format = 'dd.MM.yyyy';
-
   $scope.dateOptions = {
     maxDate: new Date(),
     minDate: new Date(1917, 5, 22),
@@ -61,42 +63,131 @@ myApp.controller('AmenitiesCtrl',['$scope', '$http', '$location', function($scop
   var maxIntNumber = 9007199254740991;
   $scope.amenities = [{'addNew':true,'id':maxIntNumber, 'name':''}];
 
-  $http.get(httpHost + '/api/amenity/').then(function successCallback(response) {
+  $http.get('api/amenity/').then(function successCallback(response) {
     $scope.amenities = $scope.amenities.concat(response.data);
+    $scope.httpError = '';
   }, function errorCallback(response) {
-    $scope.httpError = httpError;
+    $scope.httpError = response.status + " : " + response.statusText + " : " + response.config.method + " : " + response.config.url;
   });
 
   $scope.add = function (item) {
-    $http.put(httpHost + '/api/amenity/', item).then(function successCallback(response) {
+    $http.put('api/amenity/', item).then(function successCallback(response) {
       $scope.amenities.push(response.data);
       item.name = '';
+      $scope.httpError = '';
     }, function errorCallback(response) {
-      $scope.httpError = httpError;
+      $scope.httpError = response.status + " : " + response.statusText + " : " + response.config.method + " : " + response.config.url;
     });
   };
 
   $scope.update = function (item) {
-    $http.post(httpHost + '/api/amenity/' + item.id, item).then(function successCallback(response) {
+    $http.post('api/amenity/' + item.id, item).then(function successCallback(response) {
       item = response.data;
+      $scope.httpError = '';
     }, function errorCallback(response) {
-      $scope.httpError = httpError;
+      $scope.httpError = response.status + " : " + response.statusText + " : " + response.config.method + " : " + response.config.url;
     });
   };
 
   $scope.delete = function (item) {
-    $http.delete(httpHost + '/api/amenity/'+item.id).then(function successCallback(response) {
+    $http.delete('api/amenity/'+item.id).then(function successCallback(response) {
       var itemIndex = $scope.amenities.indexOf(item);
       var scopeItem = $scope.amenities.splice(itemIndex, 1);
       scopeItem = null;
+      $scope.httpError = '';
     }, function errorCallback(response) {
-      $scope.httpError = httpError;
+      $scope.httpError = response.status + " : " + response.statusText + " : " + response.config.method + " : " + response.config.url;
     });
   };
-
-
 }]);
 
-myApp.controller('DiscountTermsCtrl',['$scope','$http', '$location', function($scope, $http, $location) {
+myApp.controller('RequirementsCtrl',['$scope','$http', '$location', function($scope, $http, $location) {
+  $scope.requirements = [];
+  $http.get('api/requirement/').then(function successCallback(response) {
+    $scope.requirements = response.data;
+    $scope.httpError = '';
+  }, function errorCallback(response) {
+    $scope.httpError = response.status + " : " + response.statusText + " : " + response.config.method + " : " + response.config.url;
+  });
+}]);
+
+myApp.controller('RequirementCtrl',['$scope','$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams) {
+  $scope.successMessage = '';
+  $scope.httpError = '';
+  $scope.requirement = {};
+  // date picker
+  $scope.format = 'dd.MM.yyyy';
+  $scope.dateOptions = {
+    startingDay: 1
+  };
+  $scope.requirement.date_from = new Date();
+  $scope.popup = {
+    opened: false
+  };
+  $scope.openDataPicker = function() {
+    $scope.popup.opened = true;
+  };
+  $scope.requirement.date_to = new Date();
+  $scope.popup2 = {
+    opened: false
+  };
+  $scope.openDataPicker2 = function() {
+    $scope.popup2.opened = true;
+  };
+
+  $http.get('api/amenity/').then(function successCallback(response) {
+    $scope.requirement.amenities = response.data;
+    $scope.httpError = '';
+  }, function errorCallback(response) {
+    $scope.httpError = response.status + " : " + response.statusText + " : " + response.config.method + " : " + response.config.url;
+  });
+
+  $scope.requirement.id = $routeParams.requirementId;
+  if ($scope.requirement.id !== 'add') {
+    $http.get('api/requirement/'+$scope.requirement.id).then(function successCallback(response) {
+      if (response.data.amenities.length) {
+        response.data.amenities.map(function(amenity) {
+          $scope.requirement.amenities.forEach(function(item) {
+            if (item.id === amenity.id) {
+              item.isSelected = true;
+            }
+          });
+        });
+      }
+      $scope.requirement.flag_birth_date_before = response.data.flag_birth_date_before;
+      $scope.requirement.flag_birth_date_after = response.data.flag_birth_date_after;
+      $scope.requirement.flag_phone_number = response.data.flag_phone_number;
+      $scope.requirement.phone_number_end = response.data.phone_number_end;
+      $scope.requirement.gender = response.data.gender;
+      $scope.requirement.date_from = Date.parse(response.data.date_from);
+      $scope.requirement.date_to = Date.parse(response.data.date_to);
+      $scope.httpError = '';
+    }, function errorCallback(response) {
+      $scope.httpError = response.status + " : " + response.statusText + " : " + response.config.method + " : " + response.config.url;
+    });
+  }
+
+  $scope.saveRequirement = function () {
+    if ($scope.requirement.id === 'add') {
+      $http.put('api/requirement/', item).then(function successCallback(response) {
+        $scope.successMessage = 'Requirement was success added';
+        $scope.requirement = response.data;
+        $scope.httpError = '';
+      }, function errorCallback(response) {
+        $scope.httpError = response.status + " : " + response.statusText + " : " + response.config.method + " : " + response.config.url;
+      });
+    } else {// update
+      var copyRequirement = Object.assign({}, $scope.requirement);
+      copyRequirement.date_from = dateFormatter.getDateByTimestamp($scope.requirement.date_from);
+      copyRequirement.date_to = dateFormatter.getDateByTimestamp($scope.requirement.date_to);
+      console.log(copyRequirement);
+      $http.post('api/requirement/' + $scope.requirement.id, copyRequirement).then(function successCallback(response) {
+        $scope.successMessage = 'Requirement was success saved';
+        $scope.httpError = '';
+      }, function errorCallback(response) {
+        $scope.httpError = response.status + " : " + response.statusText + " : " + response.config.method + " : " + response.config.url;
+      });
+    }
+  };
 
 }]);

@@ -2,3 +2,8 @@ services:
     amenity_manager:
         class: AppBundle\Manager\AmenityManager
         arguments: ["@request_stack", "@doctrine.orm.entity_manager"]
+
+    requirement_manager:
+        class: AppBundle\Manager\RequirementManager
+        arguments: ["@request_stack", "@doctrine.orm.entity_manager"]
+

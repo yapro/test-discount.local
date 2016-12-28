@@ -1,6 +1,11 @@
 body {
 	padding-top: 25px;
 }
+.has-success {
+	font-weight: 700;
+	color: #3c763d;
+}
 .has-error {
+	font-weight: 700;
 	color: #a94442;
 }

@@ -47,4 +47,36 @@ class DefaultController extends Controller
     {
         return $this->get('amenity_manager')->deleteAmenity($id);
     }
+
+    /**
+     * @Rest\Get("/api/requirement/")
+     */
+    public function getRequirementsAction()
+    {
+        return $this->get('requirement_manager')->getRequirements();
+    }
+
+    /**
+     * @Rest\Get("/api/requirement/{id}")
+     */
+    public function getRequirementAction(int $id)
+    {
+        return $this->get('requirement_manager')->getRequirement($id);
+    }
+
+    /**
+     * @Rest\Put("/api/requirement/")
+     */
+    public function putRequirementAction()
+    {
+        return $this->get('requirement_manager')->addRequirement();
+    }
+
+    /**
+     * @Rest\Post("/api/requirement/{id}")
+     */
+    public function postRequirementAction(int $id)
+    {
+        return $this->get('requirement_manager')->updateRequirement($id);
+    }
 }
