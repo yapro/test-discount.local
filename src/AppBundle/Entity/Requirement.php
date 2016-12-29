@@ -68,7 +68,7 @@ class Requirement
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_to", type="date")
+     * @ORM\Column(name="date_to", type="date", nullable=true)
      */
     private $dateTo;
 
@@ -271,7 +271,7 @@ class Requirement
      *
      * @return Requirement
      */
-    public function setDateFrom(\DateTimeInterface $dateFrom = null) : Requirement
+    public function setDateFrom(\DateTimeInterface $dateFrom) : Requirement
     {
         $this->dateFrom = $dateFrom;
 
@@ -305,9 +305,9 @@ class Requirement
     /**
      * Get dateTo
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getDateTo() : \DateTime
+    public function getDateTo()
     {
         return $this->dateTo;
     }

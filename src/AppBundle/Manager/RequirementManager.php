@@ -66,20 +66,32 @@ class RequirementManager
     }
 
     /**
+     * @param int $id
+     */
+    public function deleteRequirement(int $id)
+    {
+        $amenity = $this->em->getRepository(Requirement::class)->find($id);
+        $this->em->remove($amenity);
+        $this->em->flush();
+    }
+
+    /**
      * @param Requirement $requirement
      * @return Requirement
      */
     private function enrichRequirement(Requirement $requirement) : Requirement
     {
-        $phoneNumberEnd = filter_var($this->request->get('phone_number_end'), FILTER_VALIDATE_INT);
         $requirement
             ->setDateFrom(new \DateTime($this->request->get('date_from')))
-            ->setDateTo(new \DateTime($this->request->get('date_to')))
-            ->setFlagBirthDateBefore($this->request->get('flag_birth_date_before'))
-            ->setFlagBirthDateAfter($this->request->get('flag_birth_date_after'))
-            ->setFlagPhoneNumber($this->request->get('flag_phone_number'))
-            ->setPhoneNumberEnd($phoneNumberEnd)
-            ->setGender($this->request->get('gender'));
+            ->setDateTo($this->request->get('date_to') ? new \DateTime($this->request->get('date_to')) : null)
+            ->setFlagBirthDateBefore($this->request->get('flag_birth_date_before', false))
+            ->setFlagBirthDateAfter($this->request->get('flag_birth_date_after', false))
+            ->setFlagPhoneNumber($this->request->get('flag_phone_number', false))
+            ->setGender($this->request->get('gender', 0));
+        $phoneNumberEnd = filter_var($this->request->get('phone_number_end'), FILTER_VALIDATE_INT);
+        if($phoneNumberEnd !== false) {
+            $requirement->setPhoneNumberEnd($phoneNumberEnd);
+        }
         $this->saveAmenities($requirement);
         $this->em->persist($requirement);
         $this->em->flush();

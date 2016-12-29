@@ -36,7 +36,7 @@ class AmenityManager
     /**
      * @return Amenity
      */
-    public function addAmenity()
+    public function addAmenity() : Amenity
     {
         $amenity = new Amenity();
         $amenity->setName($this->request->get('name'));

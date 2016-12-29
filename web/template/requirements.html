@@ -2,18 +2,19 @@
 <p><a ng-href="#!/requirement/add" class="btn btn-success">Add</a></p>
 <table class="table table-striped table-bordered" ng-show="requirements">
 	<thead>
-		<th>Id</th>
+		<th width="100">Id</th>
 		<th>date from</th>
 		<th>date to</th>
-		<th>Action</th>
+		<th width="160">Action</th>
 	</thead>
 	<tbody>
 		<tr ng-repeat="item in requirements | orderBy : 'id' : true">
-			<td width="100">{{ item.id }}</td>
+			<td>{{ item.id }}</td>
 			<td>{{ item.date_from | date : 'yyyy-MM-dd' }}</td>
 			<td>{{ item.date_to | date : 'yyyy-MM-dd' }}</td>
-			<td width="160">
+			<td>
 				<a ng-href="#!/requirement/{{ item.id }}" class="btn btn-success">Edit</a>
+				<button type="button" class="btn btn-danger" ng-click="delete(item)">Delete</button>
 			</td>
 		</tr>
 	</tbody>

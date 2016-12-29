@@ -79,4 +79,14 @@ class DefaultController extends Controller
     {
         return $this->get('requirement_manager')->updateRequirement($id);
     }
+
+    /**
+     * @Rest\Delete("/api/requirement/{id}")
+     */
+    public function deleteRequirementAction(int $id)
+    {
+        return $this->get('requirement_manager')->deleteRequirement($id);
+    }
+
+
 }

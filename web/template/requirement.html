@@ -1,6 +1,6 @@
 <p ng-show="httpError" class="has-error">{{ httpError }}</p>
 <p ng-show="successMessage" class="has-success">{{ successMessage }}</p>
-<form class="form-horizontal">
+<form class="form-horizontal" novalidate>
     <div class="form-group">
         <label class="col-sm-4 control-label">Услуги</label>
         <div class="col-sm-8">
@@ -45,6 +45,9 @@
     <div class="form-group">
         <label class="col-sm-4 control-label">Пол</label>
         <div class="col-sm-8">
+            <label class="radio-inline">
+                <input type="radio" name="gender" ng-model="requirement.gender" ng-value="0"> Любой
+            </label>
             <label class="radio-inline">
                 <input type="radio" name="gender" ng-model="requirement.gender" ng-value="1"> Мужской
             </label>

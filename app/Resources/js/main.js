@@ -8,21 +8,30 @@ var myApp = angular.module('myApp', [
   require('angular-ui-bootstrap')
 ]);
 
-myApp.config(['$routeProvider', function($routeProvide){
+myApp.constant('ROUTES', (function () {
+  return {
+    ORDER: '/',
+    AMENITIES: '/amenities',
+    REQUIREMENTS: '/requirements',
+    REQUIREMENT: '/requirement/'
+  }
+})()).run(['$rootScope', 'ROUTES', function ($rootScope, ROUTES) {
+  $rootScope.ROUTES = ROUTES;
+}]).config(['$routeProvider', 'ROUTES', function($routeProvide, ROUTES){
   $routeProvide
-    .when('/', {
+    .when(ROUTES.ORDER, {
       templateUrl:'template/order.html',
       controller:'orderCtrl'
     })
-    .when('/amenities',{
+    .when(ROUTES.AMENITIES,{
       templateUrl:'template/amenities.html',
       controller:'AmenitiesCtrl'
     })
-    .when('/requirements',{
+    .when(ROUTES.REQUIREMENTS,{
       templateUrl:'template/requirements.html',
       controller:'RequirementsCtrl'
     })
-    .when('/requirement/:requirementId', {
+    .when(ROUTES.REQUIREMENT + ':requirementId', {
       templateUrl:'template/requirement.html',
       controller:'RequirementCtrl'
     })
@@ -31,7 +40,7 @@ myApp.config(['$routeProvider', function($routeProvide){
     });
 }]);
 
-myApp.controller('orderCtrl',['$scope','$http', '$location', function($scope, $http, $location) {
+myApp.controller('orderCtrl',['$scope','$http', function($scope, $http) {
   $scope.amenities = [
     {'id' : 1, 'name' : 'Услуга 1'},
     {'id' : 2, 'name' : 'Услуга 2'}
@@ -58,7 +67,7 @@ myApp.controller('orderCtrl',['$scope','$http', '$location', function($scope, $h
   };
 }]);
 
-myApp.controller('AmenitiesCtrl',['$scope', '$http', '$location', function($scope, $http, $location) {
+myApp.controller('AmenitiesCtrl',['$scope', '$http', function($scope, $http) {
   $scope.httpError = '';
   var maxIntNumber = 9007199254740991;
   $scope.amenities = [{'addNew':true,'id':maxIntNumber, 'name':''}];
@@ -101,7 +110,7 @@ myApp.controller('AmenitiesCtrl',['$scope', '$http', '$location', function($scop
   };
 }]);
 
-myApp.controller('RequirementsCtrl',['$scope','$http', '$location', function($scope, $http, $location) {
+myApp.controller('RequirementsCtrl',['$scope','$http', function($scope, $http) {
   $scope.requirements = [];
   $http.get('api/requirement/').then(function successCallback(response) {
     $scope.requirements = response.data;
@@ -109,9 +118,20 @@ myApp.controller('RequirementsCtrl',['$scope','$http', '$location', function($sc
   }, function errorCallback(response) {
     $scope.httpError = response.status + " : " + response.statusText + " : " + response.config.method + " : " + response.config.url;
   });
+
+  $scope.delete = function (item) {
+    $http.delete('api/requirement/'+item.id).then(function successCallback(response) {
+      var itemIndex = $scope.requirements.indexOf(item);
+      var scopeItem = $scope.requirements.splice(itemIndex, 1);
+      scopeItem = null;
+      $scope.httpError = '';
+    }, function errorCallback(response) {
+      $scope.httpError = response.status + " : " + response.statusText + " : " + response.config.method + " : " + response.config.url;
+    });
+  };
 }]);
 
-myApp.controller('RequirementCtrl',['$scope','$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams) {
+myApp.controller('RequirementCtrl',['$scope','$http', '$location', '$routeParams', 'ROUTES', function($scope, $http, $location, $routeParams, ROUTES) {
   $scope.successMessage = '';
   $scope.httpError = '';
   $scope.requirement = {};
@@ -127,7 +147,7 @@ myApp.controller('RequirementCtrl',['$scope','$http', '$location', '$routeParams
   $scope.openDataPicker = function() {
     $scope.popup.opened = true;
   };
-  $scope.requirement.date_to = new Date();
+  $scope.requirement.date_to = null;
   $scope.popup2 = {
     opened: false
   };
@@ -168,20 +188,23 @@ myApp.controller('RequirementCtrl',['$scope','$http', '$location', '$routeParams
   }
 
   $scope.saveRequirement = function () {
-    if ($scope.requirement.id === 'add') {
-      $http.put('api/requirement/', item).then(function successCallback(response) {
+
+    var copyRequirement = Object.assign({}, $scope.requirement);
+    copyRequirement.date_from = dateFormatter.getDateByTimestamp(copyRequirement.date_from);
+    copyRequirement.date_to = typeof copyRequirement.date_to === "object" && copyRequirement.date_to !== null ?
+        dateFormatter.getDateByTimestamp(copyRequirement.date_to) : null;
+
+    if (copyRequirement.id === 'add') {
+      $http.put('api/requirement/', copyRequirement).then(function successCallback(response) {
+        $location.path(ROUTES.REQUIREMENT + response.data.id);
+        $scope.requirement.id = response.data.id;
         $scope.successMessage = 'Requirement was success added';
-        $scope.requirement = response.data;
         $scope.httpError = '';
       }, function errorCallback(response) {
         $scope.httpError = response.status + " : " + response.statusText + " : " + response.config.method + " : " + response.config.url;
       });
     } else {// update
-      var copyRequirement = Object.assign({}, $scope.requirement);
-      copyRequirement.date_from = dateFormatter.getDateByTimestamp($scope.requirement.date_from);
-      copyRequirement.date_to = dateFormatter.getDateByTimestamp($scope.requirement.date_to);
-      console.log(copyRequirement);
-      $http.post('api/requirement/' + $scope.requirement.id, copyRequirement).then(function successCallback(response) {
+      $http.post('api/requirement/' + copyRequirement.id, copyRequirement).then(function successCallback(response) {
         $scope.successMessage = 'Requirement was success saved';
         $scope.httpError = '';
       }, function errorCallback(response) {

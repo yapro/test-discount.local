@@ -13,21 +13,20 @@ How to install and configure
 JS
 ---
 
-How to start dev-server
-```
-./nodejs/bin/npm start
-```
-and than open in browser: http://localhost:8088/webpack-dev-server/ or http://localhost:8088/
-
-or alternaitve:
-```
-./nodejs/bin/node node_modules/webpack/bin/webpack.js --watch
-```
-
 How to build project for product
 ```
 ./nodejs/bin/node node_modules/webpack/bin/webpack.js -p --display-error-details
 ```
+How to develop
+```
+./nodejs/bin/node node_modules/webpack/bin/webpack.js --watch
+```
+
+or alternative - start dev-server
+```
+./nodejs/bin/npm start
+```
+and than open in browser: http://localhost:8088/webpack-dev-server/ or http://localhost:8088/
 
 How to restart node.js and dev-server
 ```
