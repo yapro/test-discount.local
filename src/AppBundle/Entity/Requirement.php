@@ -24,6 +24,13 @@ class Requirement
     private $id;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="discount", type="smallint", options={"unsigned": true, "default":"0"}, nullable=false)
+     */
+    private $discount;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="flag_birth_date_before", type="boolean", options={"unsigned": true, "default":"0"})
@@ -94,6 +101,24 @@ class Requirement
     public function getId() : int
     {
         return $this->id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDiscount(): int
+    {
+        return $this->discount;
+    }
+
+    /**
+     * @param int $discount
+     * @return Requirement
+     */
+    public function setDiscount($discount) : Requirement
+    {
+        $this->discount = $discount;
+        return $this;
     }
 
     /**

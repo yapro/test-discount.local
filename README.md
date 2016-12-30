@@ -4,6 +4,11 @@ Backend based on Symfony Standard Edition 3.2 and some bundles (PHP 7.0)
 
 Frontend based on Angular 1.6.0 and some dependencies (Node.js, npm, webpack)
 
+Mysql is used to store data
+```
+CREATE DATABASE symfony;
+```
+
 How to install and configure
 
 ```

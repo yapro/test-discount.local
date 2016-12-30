@@ -82,6 +82,7 @@ class RequirementManager
     private function enrichRequirement(Requirement $requirement) : Requirement
     {
         $requirement
+            ->setDiscount($this->request->get('discount'))
             ->setDateFrom(new \DateTime($this->request->get('date_from')))
             ->setDateTo($this->request->get('date_to') ? new \DateTime($this->request->get('date_to')) : null)
             ->setFlagBirthDateBefore($this->request->get('flag_birth_date_before', false))

@@ -1,35 +1,46 @@
-<form class="form-horizontal">
-    <div class="form-group">
-        <label for="inputFIO" class="col-sm-2 control-label">ФИО</label>
+<h1 ng-show="discount">Ваша скидка: {{ discount }}%</h1>
+<form class="form-horizontal" novalidate>
+    <div class="form-group" ng-class="{'has-error': isFioError}">
+        <label for="fio" class="col-sm-2 control-label">ФИО</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputFIO" placeholder="">
+            <input type="text"
+                   id="fio"
+                   placeholder=""
+                   ng-model="order.fio"
+                   class="form-control">
         </div>
+    </div>
+    <div class="form-group has-error" ng-show="isFioError">
+        <span class="col-sm-2">&nbsp;</span>
+        <div class="col-sm-10">Пожалуйста, заполните поле ФИО</div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label">Услуги</label>
         <div class="col-sm-10">
-            <div class="checkbox" ng-repeat="amenity in amenities">
+            <div class="checkbox" ng-repeat="amenity in order.amenities">
                 <label>
-                    <input type="checkbox" value="{{ amenity.id }}">
+                    <input type="checkbox" value="{{ amenity.id }}" ng-model="amenity.isSelected">
                     {{ amenity.name }}
                 </label>
             </div>
         </div>
     </div>
-    <div class="form-group">
+    <div class="form-group" ng-class="{'has-error': isBirthDateError}">
         <label class="col-sm-2 control-label">Дата рождения</label>
         <div class="col-sm-10">
             <p class="input-group">
                 <input name="birth_date"
+                       id="birth_date"
                        type="text"
                        class="form-control"
                        uib-datepicker-popup="{{format}}"
-                       ng-model="dt"
+                       ng-model="order.birth_date"
                        is-open="popup.opened"
                        datepicker-options="dateOptions"
                        ng-required="true"
                        close-text="Close"
-                       ng-click="openDataPicker()"/>
+                       ng-click="openDataPicker()"
+                />
                 <span class="input-group-btn">
 					<button type="button" class="btn btn-default" ng-click="openDataPicker()">
 						<i class="glyphicon glyphicon-calendar"></i>
@@ -38,26 +49,30 @@
             </p>
         </div>
     </div>
+    <div class="form-group has-error" ng-show="isBirthDateError">
+        <span class="col-sm-2">&nbsp;</span>
+        <div class="col-sm-10">Пожалуйста, заполните данное поле</div>
+    </div>
     <div class="form-group">
         <label for="inputPhone" class="col-sm-2 control-label">Телефон</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputPhone" placeholder="+7">
+            <input type="text" class="form-control" id="inputPhone" placeholder="+7" ng-model="order.phone_number">
         </div>
     </div>
     <div class="form-group">
-        <label for="inputGender" class="col-sm-2 control-label">Пол</label>
+        <label class="col-sm-2 control-label">Пол</label>
         <div class="col-sm-10">
             <label class="radio-inline">
-                <input type="radio" name="gender" id="inputGender" value="1"> Женский
+                <input type="radio" name="gender" ng-model="order.gender" ng-value="1"> Мужской
             </label>
             <label class="radio-inline">
-                <input type="radio" name="gender" value="2"> Мужской
+                <input type="radio" name="gender" ng-model="order.gender" ng-value="2"> Женский
             </label>
         </div>
     </div>
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-success">Рассчитать</button>
+            <button type="submit" class="btn btn-success" ng-click="getDiscount()">Рассчитать</button>
             <button type="reset" class="btn btn-danger">Сброс</button>
         </div>
     </div>

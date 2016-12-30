@@ -1,5 +1,7 @@
 'use strict';
 
+var jQuery = require('jquery');
+
 const angular = require('angular');
 const dateFormatter = require("./dateFormatter");
 
@@ -40,13 +42,13 @@ myApp.constant('ROUTES', (function () {
     });
 }]);
 
-myApp.controller('orderCtrl',['$scope','$http', function($scope, $http) {
-  $scope.amenities = [
-    {'id' : 1, 'name' : 'Услуга 1'},
-    {'id' : 2, 'name' : 'Услуга 2'}
-  ];
+myApp.controller('orderCtrl',['$scope', '$http', function($scope, $http) {
+  $scope.discount = 0;
+  $scope.order = {};
+  $scope.order.gender = 0;
+  $scope.order.birth_date = new Date();
   $http.get('api/amenity/').then(function successCallback(response) {
-    $scope.amenities = $scope.amenities.concat(response.data);
+    $scope.order.amenities = response.data;
     $scope.httpError = '';
   }, function errorCallback(response) {
     $scope.httpError = response.status + " : " + response.statusText + " : " + response.config.method + " : " + response.config.url;
@@ -58,12 +60,39 @@ myApp.controller('orderCtrl',['$scope','$http', function($scope, $http) {
     minDate: new Date(1917, 5, 22),
     startingDay: 1
   };
-  $scope.dt = new Date();
   $scope.popup = {
     opened: false
   };
   $scope.openDataPicker = function() {
     $scope.popup.opened = true;
+  };
+
+  $scope.getDiscount = function () {
+
+    var copyOrder = Object.assign({}, $scope.order);
+
+    $scope.isFioError = false;
+    $scope.isBirthDateError = false;
+
+    if (jQuery.trim(copyOrder.fio) === "") {
+      jQuery("#fio").focus();
+      $scope.isFioError = true;
+      return;
+    }
+
+    copyOrder.birth_date = typeof copyOrder.birth_date === "object" && copyOrder.birth_date !== null ?
+        dateFormatter.getDateByTimestamp(copyOrder.birth_date) : null;
+    if (copyOrder.birth_date === null) {
+      $scope.isBirthDateError = true;
+      return;
+    }
+
+    $http.post('api/order', copyOrder).then(function successCallback(response) {
+      $scope.discount = response.data.discount;
+      $scope.httpError = '';
+    }, function errorCallback(response) {
+      $scope.httpError = response.status + " : " + response.statusText + " : " + response.config.method + " : " + response.config.url;
+    });
   };
 }]);
 
@@ -181,6 +210,7 @@ myApp.controller('RequirementCtrl',['$scope','$http', '$location', '$routeParams
       $scope.requirement.gender = response.data.gender;
       $scope.requirement.date_from = Date.parse(response.data.date_from);
       $scope.requirement.date_to = Date.parse(response.data.date_to);
+      $scope.requirement.discount = response.data.discount;
       $scope.httpError = '';
     }, function errorCallback(response) {
       $scope.httpError = response.status + " : " + response.statusText + " : " + response.config.method + " : " + response.config.url;
@@ -212,5 +242,4 @@ myApp.controller('RequirementCtrl',['$scope','$http', '$location', '$routeParams
       });
     }
   };
-
 }]);

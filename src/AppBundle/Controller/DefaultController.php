@@ -88,5 +88,11 @@ class DefaultController extends Controller
         return $this->get('requirement_manager')->deleteRequirement($id);
     }
 
-
+    /**
+     * @Rest\Post("/api/order")
+     */
+    public function postDiscountAction()
+    {
+        return $this->get('discount_manager')->getDiscount();
+    }
 }

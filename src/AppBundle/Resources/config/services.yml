@@ -7,3 +7,6 @@ services:
         class: AppBundle\Manager\RequirementManager
         arguments: ["@request_stack", "@doctrine.orm.entity_manager"]
 
+    discount_manager:
+        class: AppBundle\Manager\DiscountManager
+        arguments: ["@request_stack", "@doctrine.orm.entity_manager"]
