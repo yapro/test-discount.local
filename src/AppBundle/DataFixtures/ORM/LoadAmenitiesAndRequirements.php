@@ -18,6 +18,7 @@ class LoadAmenitiesAndRequirements implements FixtureInterface
             $requirement = (new Requirement())
                 ->setDateFrom($date->modify('-1 week'))
                 ->setDateTo($date->modify('1 week'))
+                ->setDiscount($i*10)
             ;
             if ($i === 1) {
                 $requirement

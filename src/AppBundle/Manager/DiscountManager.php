@@ -20,16 +20,20 @@ class DiscountManager
      */
     private $em;
 
-    function __construct(RequestStack $requestStack, EntityManager $em)
+    public function __construct(RequestStack $requestStack, EntityManager $em)
     {
         $this->request = $requestStack->getCurrentRequest();
         $this->em = $em;
     }
 
-    public function getDiscount()
+    public function getMaxDiscountByRequest()
     {
-        $requirements = $this->em->getRepository(Requirement::class)->getRequirementsByParams($this->request);
-        // найти все требования и подобрать с наибольшей скидкой
-        return ['discount' => count($requirements)];
+        $discount = $this->em->getRepository(Requirement::class)->getMaxDiscount(
+            $this->request->get('amenities'),
+            $this->request->get('birth_date', ''),
+            $this->request->get('phone_number', ''),
+            $this->request->get('gender', 0)
+        );
+        return $discount;
     }
 }

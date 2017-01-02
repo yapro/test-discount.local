@@ -7,9 +7,9 @@ unlink node-v6.9.2-linux-x64.tar.gz
 mv node-v6.9.2-linux-x64 nodejs
 
 # configure web-service:
-echo -e '127.0.0.1\ttest-discount.local' >> /etc/hosts
-ln -sf /var/www/test-discount.local/nginx.conf /etc/nginx/sites-enabled/test-discount.local.conf
-service nginx reload
+sudo echo -e '127.0.0.1\ttest-discount.local' >> /etc/hosts
+sudo ln -sf /var/www/test-discount.local/nginx.conf /etc/nginx/sites-enabled/test-discount.local.conf
+sudo service nginx reload
 chmod -R 777 var/cache
 chmod -R 777 var/logs
 composer install

@@ -60,7 +60,7 @@
         <label class="col-sm-4 control-label">Период действия условия</label>
         <div class="col-sm-8">
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-5" ng-class="{'has-error': isDateFromError}">
                     <p class="input-group">
                         <input name="date_from"
                            type="text"
@@ -78,6 +78,9 @@
                             </button>
                         </span>
                     </p>
+                    <p class="has-error" ng-show="isDateFromError">
+                        Пожалуйста, заполните данное поле
+                    </p>
                 </div>
                 <div class="col-md-5">
                     <p class="input-group">
@@ -88,7 +91,6 @@
                            ng-model="requirement.date_to"
                            is-open="popup2.opened"
                            datepicker-options="dateOptions"
-                           ng-required="true"
                            close-text="Close"
                            ng-click="openDataPicker2()"/>
                         <span class="input-group-btn">

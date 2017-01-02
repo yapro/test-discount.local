@@ -244,11 +244,11 @@ class Requirement
     /**
      * Set phoneNumberEnd
      *
-     * @param integer $phoneNumberEnd
+     * @param integer|null $phoneNumberEnd
      *
      * @return Requirement
      */
-    public function setPhoneNumberEnd(int $phoneNumberEnd) : Requirement
+    public function setPhoneNumberEnd(int $phoneNumberEnd = null) : Requirement
     {
         $this->phoneNumberEnd = $phoneNumberEnd;
 
@@ -258,9 +258,9 @@ class Requirement
     /**
      * Get phoneNumberEnd
      *
-     * @return int
+     * @return int|null
      */
-    public function getPhoneNumberEnd() : int
+    public function getPhoneNumberEnd()
     {
         return $this->phoneNumberEnd;
     }

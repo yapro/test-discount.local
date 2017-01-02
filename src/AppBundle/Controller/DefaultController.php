@@ -93,6 +93,6 @@ class DefaultController extends Controller
      */
     public function postDiscountAction()
     {
-        return $this->get('discount_manager')->getDiscount();
+        return ['discount' => $this->get('discount_manager')->getMaxDiscountByRequest()];
     }
 }
