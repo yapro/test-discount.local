@@ -72,6 +72,8 @@ swiftmailer:
 # FOSRest Configuration
 fos_rest:
 #    body_listener: true
+    body_converter:
+        enabled: true
     serializer:
         serialize_null: true
     format_listener:
@@ -82,3 +84,8 @@ fos_rest:
         view_response_listener: 'force'
         formats:
             json: true
+
+sensio_framework_extra:
+    request: { converters: true }
+
+nelmio_api_doc: ~

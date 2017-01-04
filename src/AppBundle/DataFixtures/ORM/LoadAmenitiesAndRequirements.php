@@ -13,14 +13,14 @@ class LoadAmenitiesAndRequirements implements FixtureInterface
     public function load(ObjectManager $manager)
     {
         $amenityIndex = 0;
-        for ($i = 0; $i < 2; $i++) {
+        for ($i = 1; $i < 3; $i++) {
             $date = new \DateTimeImmutable();
             $requirement = (new Requirement())
                 ->setDateFrom($date->modify('-1 week'))
                 ->setDateTo($date->modify('1 week'))
                 ->setDiscount($i*10)
             ;
-            if ($i === 1) {
+            if ($i === 2) {
                 $requirement
                     ->setFlagBirthDateBefore(true)
                     ->setFlagBirthDateAfter(true)

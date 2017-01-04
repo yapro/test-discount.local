@@ -9,4 +9,4 @@ services:
 
     discount_manager:
         class: AppBundle\Manager\DiscountManager
-        arguments: ["@request_stack", "@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager"]

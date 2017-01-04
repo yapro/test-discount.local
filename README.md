@@ -38,3 +38,8 @@ How to restart node.js and dev-server
 killall -9 node
 ./nodejs/bin/node dev-server
 ```
+
+Other
+---
+
+Read REST-full API documentation on page http://test-discount.local/api

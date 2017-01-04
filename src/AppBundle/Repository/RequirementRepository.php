@@ -8,15 +8,15 @@ use Doctrine\ORM\EntityRepository;
 class RequirementRepository extends EntityRepository
 {
 	/**
+	 * @param \DateTime $birthDate
 	 * @param array $amenities
-	 * @param string $birthDate
 	 * @param string $phoneNumber
 	 * @param int $gender
 	 * @return int
 	 */
 	public function getMaxDiscount(
+		\DateTime $birthDate,
 		array $amenities,
-		string $birthDate,
 		string $phoneNumber,
 		int $gender
 	) : int
@@ -80,34 +80,30 @@ class RequirementRepository extends EntityRepository
 	}
 
 	/**
-	 * @param string $birthDate
+	 * @param \DateTime $birthDateReal
 	 * @return string
 	 */
-	private function getBirthDayConditions(string $birthDate) : string
+	private function getBirthDayConditions(\DateTime $birthDateReal) : string
 	{
-		// если клиент указал дату, то он надеется что мы поищем и среди предложений с учетом дня рождения
-		if (!empty($birthDate)) {
-			$birthDateReal = (new \DateTime($birthDate))->format('-m-d');
-			$birthDate = (new \DateTime(date('Y') . $birthDateReal))->setTime(0, 0, 0);
-			$today = (new \DateTimeImmutable())->setTime(0, 0, 0);
-			$weekBefore = $today->modify('-1 week');
-			$weekAfter = $today->modify('1 week');
-			$isWeekBefore = $birthDate >= $weekBefore;
-			$isWeekAfter = $birthDate <= $weekAfter;
-			// если д.р. клиента попадает под условие неделя до и неделея после д.р.
-			if ($isWeekBefore && $isWeekAfter) {
-				$where = [];
-				$where[] = 'r.flag_birth_date_before = 1 AND r.flag_birth_date_after = 1';
-				// если дата рождения  клиента попадает под условие - неделя после
-				if ($isWeekBefore && $birthDate <= $today) {
-					$where[] = 'r.flag_birth_date_before IN (0,1) AND r.flag_birth_date_after = 0';
-				}
-				// если дата рождения клиента попадает под условие - неделя до
-				if ($birthDate > $today && $isWeekAfter) {
-					$where[] = 'r.flag_birth_date_before = 0 AND r.flag_birth_date_after IN (0,1)';
-				}
-				return '(' . implode(' OR ', $where) . ')';
+		$birthDate = (new \DateTime(date('Y') . $birthDateReal->format('-m-d')))->setTime(0, 0, 0);
+		$today = (new \DateTimeImmutable())->setTime(0, 0, 0);
+		$weekBefore = $today->modify('-1 week');
+		$weekAfter = $today->modify('1 week');
+		$isWeekBefore = $birthDate >= $weekBefore;
+		$isWeekAfter = $birthDate <= $weekAfter;
+		// если д.р. клиента попадает под условие неделя до и неделея после д.р.
+		if ($isWeekBefore && $isWeekAfter) {
+			$where = [];
+			$where[] = 'r.flag_birth_date_before = 1 AND r.flag_birth_date_after = 1';
+			// если дата рождения  клиента попадает под условие - неделя после
+			if ($isWeekBefore && $birthDate <= $today) {
+				$where[] = 'r.flag_birth_date_before IN (0,1) AND r.flag_birth_date_after = 0';
 			}
+			// если дата рождения клиента попадает под условие - неделя до
+			if ($birthDate > $today && $isWeekAfter) {
+				$where[] = 'r.flag_birth_date_before = 0 AND r.flag_birth_date_after IN (0,1)';
+			}
+			return '(' . implode(' OR ', $where) . ')';
 		}
 		return 'r.flag_birth_date_before = 0 AND r.flag_birth_date_after = 0';
 	}
