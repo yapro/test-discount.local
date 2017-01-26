@@ -8,29 +8,29 @@ use JMS\Serializer\Annotation as Serializer;
 
 class MaxDiscountResponse
 {
-	/**
-	 *
-	 * @var integer
-	 * @Serializer\Type("integer")
-	 * @Serializer\SerializedName("discount")
-	 */
-	private $discount;
+    /**
+     *
+     * @var integer
+     * @Serializer\Type("integer")
+     * @Serializer\SerializedName("discount")
+     */
+    private $discount;
 
-	/**
-	 * @return int
-	 */
-	public function getDiscount() : int
-	{
-		return $this->discount;
-	}
+    /**
+     * @return int
+     */
+    public function getDiscount() : int
+    {
+        return $this->discount;
+    }
 
-	/**
-	 * @param int $discount
-	 * @return MaxDiscountResponse
-	 */
-	public function setDiscount($discount) : MaxDiscountResponse
-	{
-		$this->discount = $discount;
-		return $this;
-	}
+    /**
+     * @param int $discount
+     * @return MaxDiscountResponse
+     */
+    public function setDiscount($discount) : MaxDiscountResponse
+    {
+        $this->discount = $discount;
+        return $this;
+    }
 }
